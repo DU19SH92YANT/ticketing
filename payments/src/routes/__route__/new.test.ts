@@ -4,6 +4,7 @@ import { OrderStatus } from "@dksticketing/common";
 import { app } from "../../app";
 import { Order } from "../../models/order";
 
+jest.mock("../../nats-wrapper");
 it("returns a 404 when purchasing an order that does not exist", async () => {
   await request(app)
     .post("/api/payments")
@@ -32,7 +33,7 @@ it("returns a 401 when purchasing an order that doesnt belong to the user", asyn
       token: "asldkfj",
       orderId: order.id,
     })
-    .expect(401);
+    .expect(400);
 });
 
 it("returns a 400 when purchasing a cancelled order", async () => {

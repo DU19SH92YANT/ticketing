@@ -7,6 +7,7 @@ import { natsWrapper } from "./nats-wrapper";
 import { ExpirationCompleteListener } from "./events/Listners/expiration-complete-listner";
 import { PaymentCreatedListener } from "./events/Listners/payment-created-listener";
 const start = async () => {
+  console.log("start order .....");
   if (!process.env.JWT_KEY) {
     throw new Error("JWT_KET muxt be defined");
   }
