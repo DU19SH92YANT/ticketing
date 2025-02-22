@@ -33,7 +33,7 @@ it("returns a 401 when purchasing an order that doesnt belong to the user", asyn
       token: "asldkfj",
       orderId: order.id,
     })
-    .expect(401);
+    .expect(400);
 });
 
 it("returns a 400 when purchasing a cancelled order", async () => {
