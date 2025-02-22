@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { NotAuthorizedError } from "../errors/not-authorise";
 
 interface UserPayload {
   id: string;
@@ -20,8 +19,21 @@ export const requireAuth = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req?.currentUser) {
-    throw new NotAuthorizedError();
+  // ✅ Extract JWT from cookies instead of session
+  const token = req.cookies?.jwt;
+
+  if (!token) {
+    console.log("No JWT found in cookies");
+    return next();
   }
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_KEY!) as UserPayload;
+    req.currentUser = payload; // ✅ Set user in request
+    console.log("User authenticated:", req.currentUser);
+  } catch (err) {
+    console.error("JWT Verification Failed:", err);
+  }
+
   next();
 };
